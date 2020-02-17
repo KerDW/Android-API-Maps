@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://192.168.1.33:80/Laravel-API/public/api/")
+                .baseUrl("http://"+getString(R.string.ip)+":80/laravelrestapi/public/api/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
