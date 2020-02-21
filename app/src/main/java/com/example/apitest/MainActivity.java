@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
 
         SocketClient socks = null;
         try {
-            socks = new SocketClient(new URI("ws://172.16.12.12:6001/app/undostres"));
+            socks = new SocketClient(new URI("ws://"+getString(R.string.ip)+":8080"));
             Log.i("xd", socks.getURI().toString());
         } catch (URISyntaxException e) {
             e.printStackTrace();
@@ -100,7 +100,6 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onOpen( ServerHandshake handshakedata ) {
-            send("{\"event\": \"xd\"}");
             Log.i("xd", "opened connection" );
             // if you plan to refuse connection based on ip or httpfields overload: onWebsocketHandshakeReceivedAsClient
         }
