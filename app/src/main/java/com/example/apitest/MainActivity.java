@@ -2,20 +2,16 @@ package com.example.apitest;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
-
-import org.java_websocket.client.WebSocketClient;
-import org.java_websocket.drafts.Draft;
-import org.java_websocket.handshake.ServerHandshake;
 
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
-import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -25,12 +21,18 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
 
+    SocketClient socks = null;
     ApiService service;
+
+    EditText message;
+    Button button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        button = findViewById(R.id.send);
+        message = findViewById(R.id.message);
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://"+getString(R.string.ip)+":80/laravelrestapi/public/api/")
@@ -53,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
                     List<Car> cars = response.body();
 
                     for (Car car : cars) {
-                        Log.e("xd",car.toString());
+//                        Log.e("xd",car.toString());
                     }
 
                 } else
@@ -73,7 +75,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        SocketClient socks = null;
         try {
             socks = new SocketClient(new URI("ws://"+getString(R.string.ip)+":8080"));
             Log.i("xd", socks.getURI().toString());
@@ -84,42 +85,9 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public static class SocketClient extends WebSocketClient {
+    public void sendMessage(View view) {
 
-        public SocketClient( URI serverUri , Draft draft ) {
-            super( serverUri, draft );
-        }
+        socks.send(message.getText().toString());
 
-        public SocketClient( URI serverURI ) {
-            super( serverURI );
-        }
-
-        public SocketClient( URI serverUri, Map<String, String> httpHeaders ) {
-            super(serverUri, httpHeaders);
-        }
-
-        @Override
-        public void onOpen( ServerHandshake handshakedata ) {
-            Log.i("xd", "opened connection" );
-            // if you plan to refuse connection based on ip or httpfields overload: onWebsocketHandshakeReceivedAsClient
-        }
-
-        @Override
-        public void onMessage( String message ) {
-            Log.i("xd",  "received: " + message );
-        }
-
-        @Override
-        public void onClose( int code, String reason, boolean remote ) {
-            // The codecodes are documented in class org.java_websocket.framing.CloseFrame
-            Log.i("xd", "Connection closed by " + ( remote ? "remote peer" : "us" ) + " Code: " + code + " Reason: " + reason );
-        }
-
-        @Override
-        public void onError( Exception ex ) {
-            Log.i("xd", ex.toString());
-            // if the error is fatal then onClose will be called additionally
-        }
     }
-
 }
