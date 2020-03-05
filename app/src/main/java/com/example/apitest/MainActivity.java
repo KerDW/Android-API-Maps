@@ -2,11 +2,13 @@ package com.example.apitest;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.net.URI;
@@ -21,10 +23,10 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
 
-    SocketClient socks = null;
     ApiService service;
 
     EditText message;
+    TextView messageReceived;
     Button button;
 
     @Override
@@ -33,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         button = findViewById(R.id.send);
         message = findViewById(R.id.message);
+        messageReceived = findViewById(R.id.messageReceived);
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://"+getString(R.string.ip)+":80/laravelrestapi/public/api/")
@@ -74,20 +77,6 @@ public class MainActivity extends AppCompatActivity {
                 Log.e("xd", "Network Error :: " + t.getLocalizedMessage());
             }
         });
-
-        try {
-            socks = new SocketClient(new URI("ws://"+getString(R.string.ip)+":8080"));
-            Log.i("xd", socks.getURI().toString());
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
-        socks.connect();
-
-    }
-
-    public void sendMessage(View view) {
-
-        socks.send(message.getText().toString());
 
     }
 }
