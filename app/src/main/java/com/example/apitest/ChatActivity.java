@@ -23,10 +23,11 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class MainActivity extends AppCompatActivity {
+import static com.example.apitest.UserActivity.mSocket;
+
+public class ChatActivity extends AppCompatActivity {
 
     ApiService service;
-    Socket mSocket;
 
     EditText message;
     TextView messageReceived;
@@ -38,15 +39,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         button = findViewById(R.id.send);
         message = findViewById(R.id.message);
-        messageReceived = findViewById(R.id.messageReceived);
-
-        try {
-            mSocket = IO.socket("http://"+getString(R.string.ip)+":5000");
-            mSocket.connect();
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-            Log.e("xd", e.getMessage()+"xd");
-        }
 
 
 //        Retrofit retrofit = new Retrofit.Builder()
@@ -95,13 +87,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onDestroy() {
         super.onDestroy();
-
         mSocket.disconnect();
+
     }
 
     public void sendMessage(View view) {
 
-        Log.i("xd","sending message");
         mSocket.emit("message",message.getText().toString());
 
     }
