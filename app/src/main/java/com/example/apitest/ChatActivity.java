@@ -3,6 +3,7 @@ package com.example.apitest;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -39,6 +40,12 @@ public class ChatActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         button = findViewById(R.id.send);
         message = findViewById(R.id.message);
+
+        mSocket.on("message", args -> {
+
+            Log.i("xd", args[0].toString());
+
+        });
 
 
 //        Retrofit retrofit = new Retrofit.Builder()
