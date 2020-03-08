@@ -35,7 +35,7 @@ public class UserActivity extends AppCompatActivity {
         join = findViewById(R.id.join);
 
         try {
-            mSocket = IO.socket("http://172.16.12.12:5000");
+            mSocket = IO.socket("http://10.0.2.2:5000");
             mSocket.connect();
         } catch (URISyntaxException e) {
             e.printStackTrace();

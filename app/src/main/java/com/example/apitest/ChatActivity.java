@@ -49,7 +49,7 @@ public class ChatActivity extends AppCompatActivity {
 
 
 //        Retrofit retrofit = new Retrofit.Builder()
-//                .baseUrl("http://"+getString(R.string.ip)+":80/laravelrestapi/public/api/")
+//                .baseUrl("http://10.0.2.2:80/laravelrestapi/public/api/")
 //                .addConverterFactory(GsonConverterFactory.create())
 //                .build();
 //
