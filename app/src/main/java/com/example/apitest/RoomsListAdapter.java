@@ -53,7 +53,7 @@ class RoomListAdapter extends ArrayAdapter <Room>{
         enter.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
-                mSocket.emit("join", name.getText().toString());
+                mSocket.emit("joinRoom", name.getText().toString());
 
             }
         });

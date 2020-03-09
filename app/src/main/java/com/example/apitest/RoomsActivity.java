@@ -2,6 +2,7 @@ package com.example.apitest;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -43,6 +44,8 @@ public class RoomsActivity extends AppCompatActivity {
         message = findViewById(R.id.message);
         lv = findViewById(R.id.lv);
 
+        String username = getIntent().getStringExtra("USERNAME");
+
         adapter = new RoomListAdapter(
                 RoomsActivity.this,
                 R.layout.rooms,
@@ -57,6 +60,33 @@ public class RoomsActivity extends AppCompatActivity {
 //
 //        });
 
+        mSocket.on("ready", args -> {
+
+            Intent intent = new Intent(this, MapsActivity.class);
+            intent.putExtra("USERNAME", username);
+
+            startActivity(intent);
+
+        });
+
+        getRooms();
+
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mSocket.disconnect();
+
+    }
+
+    public void sendMessage(View view) {
+
+        mSocket.emit("message",message.getText().toString());
+
+    }
+
+    public void getRooms(){
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(localhost + ":80/laravelrestapi/public/api/")
                 .addConverterFactory(GsonConverterFactory.create())
@@ -78,13 +108,8 @@ public class RoomsActivity extends AppCompatActivity {
 
                     Log.i("xd", rooms.toString());
 
-                } else
-                {
-                    System.out.println("Request Error :: " + response.errorBody());
-                    Toast.makeText(
-                            getApplicationContext(),
-                            "Name not found.",
-                            Toast.LENGTH_LONG).show();
+                } else {
+                    Log.e("xd","Request Error :: " + response.errorBody());
                 }
             }
 
@@ -94,19 +119,5 @@ public class RoomsActivity extends AppCompatActivity {
                 Log.e("xd", "Network Error :: " + t.getLocalizedMessage());
             }
         });
-
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        mSocket.disconnect();
-
-    }
-
-    public void sendMessage(View view) {
-
-        mSocket.emit("message",message.getText().toString());
-
     }
 }

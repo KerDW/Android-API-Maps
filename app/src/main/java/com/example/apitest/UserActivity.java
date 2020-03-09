@@ -60,7 +60,7 @@ public class UserActivity extends AppCompatActivity {
         mSocket.emit("join", username.getText().toString(), password.getText().toString());
 
         Intent intent = new Intent(UserActivity.this, RoomsActivity.class);
-        intent.putExtra(username.getText().toString(), 1);
+        intent.putExtra("USERNAME", username.getText().toString());
 
         startActivity(intent);
 
