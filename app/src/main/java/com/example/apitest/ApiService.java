@@ -7,7 +7,7 @@ import retrofit2.http.GET;
 
 public interface ApiService {
 
-    @GET("cars")
-    Call<List<Car>> getCars();
+    @GET("rooms")
+    Call<List<Room>> getRooms();
 
 }
