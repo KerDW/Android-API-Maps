@@ -29,6 +29,12 @@ class RoomListAdapter extends ArrayAdapter <Room>{
         this.rooms = objects;
     }
 
+    public void updateRooms(List<Room> newlist) {
+        rooms.clear();
+        rooms.addAll(newlist);
+        this.notifyDataSetChanged();
+    }
+
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
@@ -42,12 +48,12 @@ class RoomListAdapter extends ArrayAdapter <Room>{
         Button enter = v.findViewById(R.id.enter);
 
         name.setText(r.getName());
-        capacity.setText(r.getCapacity());
+        capacity.setText(String.valueOf(r.getCapacity()));
 
         enter.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
-                mSocket.emit("join", name);
+                mSocket.emit("join", name.getText().toString());
 
             }
         });

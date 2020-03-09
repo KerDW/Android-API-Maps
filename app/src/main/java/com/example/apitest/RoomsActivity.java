@@ -7,9 +7,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -28,8 +30,10 @@ public class RoomsActivity extends AppCompatActivity {
     EditText message;
     TextView messageReceived;
     Button button;
+    ListView lv;
 
     RoomListAdapter adapter;
+    List<Room> rooms = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +41,15 @@ public class RoomsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         button = findViewById(R.id.send);
         message = findViewById(R.id.message);
+        lv = findViewById(R.id.lv);
+
+        adapter = new RoomListAdapter(
+                RoomsActivity.this,
+                R.layout.rooms,
+                rooms
+        );
+
+        lv.setAdapter(adapter);
 
 //        mSocket.on("message", args -> {
 //
@@ -60,13 +73,8 @@ public class RoomsActivity extends AppCompatActivity {
             {
                 if (response.body() != null)
                 {
-                    List<Room> rooms = response.body();
-
-                    adapter = new RoomListAdapter(
-                            RoomsActivity.this,
-                            R.layout.rooms,
-                            rooms
-                    );
+                    rooms = response.body();
+                    adapter.updateRooms(rooms);
 
                     Log.i("xd", rooms.toString());
 
