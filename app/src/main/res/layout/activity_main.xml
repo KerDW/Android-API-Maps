@@ -11,7 +11,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="76dp"
-        android:layout_marginEnd="60dp"
         android:onClick="newRoom"
         android:text="NEW ROOM"
         app:layout_constraintEnd_toEndOf="parent"
@@ -28,13 +27,45 @@
 
     <EditText
         android:id="@+id/newRoomText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="196dp"
+        android:layout_height="46dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="76dp"
         android:ems="10"
         android:inputType="textPersonName"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textViewRoomName"
+        android:layout_width="86dp"
+        android:layout_height="22dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="43dp"
+        android:text="Room Name"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+        android:id="@+id/textViewCapacity"
+        android:layout_width="86dp"
+        android:layout_height="22dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="105dp"
+        android:text="Capacity"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/capacity"
+        android:layout_width="79dp"
+        android:layout_height="46dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="76dp"
+        android:ems="10"
+        android:inputType="number"
+        app:layout_constraintStart_toEndOf="@+id/newRoomText"
         app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

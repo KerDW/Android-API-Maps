@@ -6,10 +6,9 @@ public class Room {
     private int capacity;
     private int user_count;
 
-    public Room(String name, int capacity, int user_count) {
+    public Room(String name, int capacity) {
         this.name = name;
         this.capacity = capacity;
-        this.user_count = user_count;
     }
 
     public Room() {

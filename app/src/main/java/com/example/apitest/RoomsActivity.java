@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,6 +30,7 @@ public class RoomsActivity extends AppCompatActivity {
     ApiService service;
 
     EditText newRoomText;
+    EditText capacity;
     Button newRoom;
     ListView lv;
 
@@ -41,6 +43,7 @@ public class RoomsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         newRoom = findViewById(R.id.newRoom);
         newRoomText = findViewById(R.id.newRoomText);
+        capacity = findViewById(R.id.capacity);
         lv = findViewById(R.id.lv);
 
         retrofit = new Retrofit.Builder()
@@ -88,16 +91,42 @@ public class RoomsActivity extends AppCompatActivity {
 
     public void newRoom(View view) {
 
-        // Call<Room> call = service.newRoom();
+        Room room = new Room(newRoom.getText().toString(), Integer.parseInt(capacity.getText().toString()));
 
-        // this will just inform others of the new room
-        mSocket.emit("newRoom");
+        Log.i("xd", "trying to create room");
+
+        Thread thread = new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+
+                Call<Room> call = service.newRoom(room);
+
+                Log.i("xd", call.request().url().toString());
+
+                try {
+                    call.execute();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    Log.i("xd", e.getMessage()+"");
+                    return;
+                }
+
+                //this will just inform others of the new room
+                mSocket.emit("newRoom");
+
+            }
+        });
+
+        thread.start();
 
     }
 
     public void getRooms(){
 
         Call<List<Room>> callAsync = service.getRooms();
+
+        Log.i("xd", "get rooms called");
 
         callAsync.enqueue(new Callback<List<Room>>()
         {
@@ -113,6 +142,7 @@ public class RoomsActivity extends AppCompatActivity {
 
                 } else {
                     Log.e("xd","Request Error :: " + response.errorBody());
+                    Log.e("xd","Request Error :: " + response.message());
                 }
             }
 
