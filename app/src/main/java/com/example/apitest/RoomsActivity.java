@@ -10,7 +10,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,11 +25,11 @@ import static com.example.apitest.UserActivity.mSocket;
 
 public class RoomsActivity extends AppCompatActivity {
 
+    Retrofit retrofit;
     ApiService service;
 
-    EditText message;
-    TextView messageReceived;
-    Button button;
+    EditText newRoomText;
+    Button newRoom;
     ListView lv;
 
     RoomListAdapter adapter;
@@ -40,9 +39,16 @@ public class RoomsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        button = findViewById(R.id.send);
-        message = findViewById(R.id.message);
+        newRoom = findViewById(R.id.newRoom);
+        newRoomText = findViewById(R.id.newRoomText);
         lv = findViewById(R.id.lv);
+
+        retrofit = new Retrofit.Builder()
+                .baseUrl(localhost + ":80/laravelrestapi/public/api/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        service = retrofit.create(ApiService.class);
 
         String username = getIntent().getStringExtra("USERNAME");
 
@@ -54,11 +60,7 @@ public class RoomsActivity extends AppCompatActivity {
 
         lv.setAdapter(adapter);
 
-//        mSocket.on("message", args -> {
-//
-//            Log.i("xd", args[0].toString());
-//
-//        });
+        getRooms();
 
         mSocket.on("ready", args -> {
 
@@ -69,7 +71,11 @@ public class RoomsActivity extends AppCompatActivity {
 
         });
 
-        getRooms();
+        mSocket.on("newRoom", args -> {
+
+            getRooms();
+
+        });
 
     }
 
@@ -80,19 +86,16 @@ public class RoomsActivity extends AppCompatActivity {
 
     }
 
-    public void sendMessage(View view) {
+    public void newRoom(View view) {
 
-        mSocket.emit("message",message.getText().toString());
+        // Call<Room> call = service.newRoom();
+
+        // this will just inform others of the new room
+        mSocket.emit("newRoom");
 
     }
 
     public void getRooms(){
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(localhost + ":80/laravelrestapi/public/api/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        service = retrofit.create(ApiService.class);
 
         Call<List<Room>> callAsync = service.getRooms();
 
