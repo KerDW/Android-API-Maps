@@ -128,8 +128,6 @@ public class RoomsActivity extends AppCompatActivity {
                     rooms = response.body();
                     adapter.updateRooms(rooms);
 
-                    Log.i("xd", rooms.toString());
-
                 } else {
                     Log.e("xd","Request Error :: " + response.errorBody());
                     Log.e("xd","Request Error :: " + response.message());

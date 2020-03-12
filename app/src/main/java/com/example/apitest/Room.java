@@ -2,6 +2,7 @@ package com.example.apitest;
 
 public class Room {
 
+    private int id;
     private String name;
     private int capacity;
     private int user_count;
@@ -16,6 +17,14 @@ public class Room {
 
     public int getUser_count() {
         return user_count;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public void setUser_count(int user_count) {
@@ -41,7 +50,8 @@ public class Room {
     @Override
     public String toString() {
         return "Room{" +
-                "name='" + name + '\'' +
+                "id=" + id +
+                ", name='" + name + '\'' +
                 ", capacity=" + capacity +
                 ", user_count=" + user_count +
                 '}';

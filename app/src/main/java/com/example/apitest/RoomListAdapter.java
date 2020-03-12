@@ -1,6 +1,7 @@
 package com.example.apitest;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,19 +45,20 @@ class RoomListAdapter extends ArrayAdapter <Room>{
         final Room r = rooms.get(position);
 
         TextView name = v.findViewById(R.id.room_name);
+        TextView user_count = v.findViewById(R.id.user_count);
         TextView capacity = v.findViewById(R.id.capacity);
         Button enter = v.findViewById(R.id.enter);
 
         name.setText(r.getName());
         capacity.setText(String.valueOf(r.getCapacity()));
+        user_count.setText(String.valueOf(r.getUser_count()));
 
-        enter.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
+        View.OnClickListener enterButton = v1 -> {
 
-                mSocket.emit("joinRoom", name.getText().toString());
+            mSocket.emit("joinRoom", r.getId(), name.getText().toString(), Integer.parseInt(capacity.getText().toString()));
+        };
 
-            }
-        });
+        enter.setOnClickListener(enterButton);
 
         return v;
 
