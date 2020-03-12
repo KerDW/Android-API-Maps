@@ -74,7 +74,7 @@ public class RoomsActivity extends AppCompatActivity {
 
         });
 
-        mSocket.on("newRoom", args -> {
+        mSocket.on("roomUpdate", args -> {
 
             getRooms();
 
@@ -91,31 +91,23 @@ public class RoomsActivity extends AppCompatActivity {
 
     public void newRoom(View view) {
 
-        Room room = new Room(newRoom.getText().toString(), Integer.parseInt(capacity.getText().toString()));
+        Room room = new Room(newRoomText.getText().toString(), Integer.parseInt(capacity.getText().toString()));
 
-        Log.i("xd", "trying to create room");
+        Thread thread = new Thread(() -> {
 
-        Thread thread = new Thread(new Runnable() {
+            Call<Room> call = service.newRoom(room);
 
-            @Override
-            public void run() {
-
-                Call<Room> call = service.newRoom(room);
-
-                Log.i("xd", call.request().url().toString());
-
-                try {
-                    call.execute();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    Log.i("xd", e.getMessage()+"");
-                    return;
-                }
-
-                //this will just inform others of the new room
-                mSocket.emit("newRoom");
-
+            try {
+                call.execute();
+            } catch (IOException e) {
+                e.printStackTrace();
+                Log.i("xd", e.getMessage()+"");
+                return;
             }
+
+            //this will just inform others of the new room
+            mSocket.emit("newRoom");
+
         });
 
         thread.start();
@@ -125,8 +117,6 @@ public class RoomsActivity extends AppCompatActivity {
     public void getRooms(){
 
         Call<List<Room>> callAsync = service.getRooms();
-
-        Log.i("xd", "get rooms called");
 
         callAsync.enqueue(new Callback<List<Room>>()
         {

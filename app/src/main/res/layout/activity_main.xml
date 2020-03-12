@@ -18,9 +18,9 @@
 
     <ListView
         android:id="@+id/lv"
-        android:layout_width="413dp"
-        android:layout_height="348dp"
-        android:layout_marginTop="256dp"
+        android:layout_width="412dp"
+        android:layout_height="412dp"
+        android:layout_marginTop="192dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/newRoomText" />
