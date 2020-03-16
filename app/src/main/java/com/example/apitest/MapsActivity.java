@@ -2,6 +2,7 @@ package com.example.apitest;
 
 import androidx.fragment.app.FragmentActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -10,6 +11,8 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import static com.example.apitest.UserActivity.mSocket;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -38,10 +41,26 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        String username = getIntent().getStringExtra("USERNAME");
 
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng point) {
+                mMap.addMarker(new MarkerOptions().position(point).title(username));
+                mSocket.emit("newMarker", point.latitude, point.longitude, username);
+            }
+        });
+
+        mSocket.on("marker", args -> {
+
+            LatLng location = new LatLng((Double) args[0], (Double) args[1]);
+
+            // update view on ui thread
+            runOnUiThread(new Runnable(){
+                public void run(){
+                    mMap.addMarker(new MarkerOptions().position(location).title((String) args[2]));
+                }
+            });
+        });
     }
 }
