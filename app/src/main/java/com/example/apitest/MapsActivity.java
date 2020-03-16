@@ -54,11 +54,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mSocket.on("marker", args -> {
 
             LatLng location = new LatLng((Double) args[0], (Double) args[1]);
+            String markerUsername = (String) args[2];
 
             // update view on ui thread
             runOnUiThread(new Runnable(){
                 public void run(){
-                    mMap.addMarker(new MarkerOptions().position(location).title((String) args[2]));
+                    mMap.addMarker(new MarkerOptions().position(location).title(markerUsername);
                 }
             });
         });
