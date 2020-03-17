@@ -89,6 +89,9 @@ public class RoomsActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {}
+
     public void newRoom(View view) {
 
         Room room = new Room(newRoomText.getText().toString(), Integer.parseInt(capacity.getText().toString()));
