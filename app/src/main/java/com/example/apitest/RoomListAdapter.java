@@ -114,6 +114,31 @@ class RoomListAdapter extends ArrayAdapter <Room>{
                     dialog.cancel();
                 }
             })
+            .setNeutralButton(R.string.delete, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+
+                    Thread thread = new Thread(() -> {
+
+                        Call<Void> call = service.destroyRoom(r.getId());
+
+                        try {
+                            call.execute();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                            Log.i("xd", "delete failed");
+                            Log.i("xd", e.getMessage() + "");
+                            return;
+                        }
+
+                        //this will just inform others of the new room
+                        mSocket.emit("newRoom");
+
+                    });
+
+                    thread.start();
+                    dialog.cancel();
+                }
+            })
             .show();
 
 

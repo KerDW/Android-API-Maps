@@ -23,6 +23,6 @@ public interface ApiService {
     Call<Room> editRoom(@Path("id") int id, @Body Room room);
 
     @DELETE("rooms/{id}")
-    Call<Room> destroyRoom(@Path("id") int id);
+    Call<Void> destroyRoom(@Path("id") int id);
 
 }

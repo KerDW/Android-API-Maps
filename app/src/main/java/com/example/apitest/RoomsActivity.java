@@ -146,10 +146,4 @@ public class RoomsActivity extends AppCompatActivity {
         });
     }
 
-    public void deleteRoom(View view) {
-
-
-
-    }
-
 }
