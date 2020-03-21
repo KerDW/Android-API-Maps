@@ -6,4 +6,11 @@
     <string name="enter_username">Introdueix el teu nom d\'usuari</string>
     <string name="enter_password">Introdueix la teva contrasenya</string>
     <string name="title_activity_maps">Mapa</string>
+    <string name="enter">Entra</string>
+    <string name="edit">Edita</string>
+    <string name="modify">Modifica</string>
+    <string name="delete">Esborra</string>
+    <string name="enter_room_capacity">Inserta la nova capacitat de la sala</string>
+    <string name="enter_room_name">Inserta el nou nom de la sala</string>
+    <string name="cancel">Cancel·la</string>
 </resources>

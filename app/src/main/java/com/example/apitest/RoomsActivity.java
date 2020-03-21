@@ -23,11 +23,12 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 import static com.example.apitest.UserActivity.localhost;
 import static com.example.apitest.UserActivity.mSocket;
+import static java.lang.Integer.parseInt;
 
 public class RoomsActivity extends AppCompatActivity {
 
     Retrofit retrofit;
-    ApiService service;
+    static ApiService service;
 
     EditText newRoomText;
     EditText capacity;
@@ -94,7 +95,7 @@ public class RoomsActivity extends AppCompatActivity {
 
     public void newRoom(View view) {
 
-        Room room = new Room(newRoomText.getText().toString(), Integer.parseInt(capacity.getText().toString()));
+        Room room = new Room(newRoomText.getText().toString(), parseInt(capacity.getText().toString()));
 
         Thread thread = new Thread(() -> {
 
@@ -144,4 +145,11 @@ public class RoomsActivity extends AppCompatActivity {
             }
         });
     }
+
+    public void deleteRoom(View view) {
+
+
+
+    }
+
 }

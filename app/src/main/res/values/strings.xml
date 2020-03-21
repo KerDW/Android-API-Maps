@@ -6,4 +6,11 @@
     <string name="capacity">Capacity</string>
     <string name="enter_username">Enter your username</string>
     <string name="enter_password">Enter your password</string>
+    <string name="enter_room_name">Enter the new room name</string>
+    <string name="enter_room_capacity">Enter the new room capacity</string>
+    <string name="enter">Enter</string>
+    <string name="edit">Edit</string>
+    <string name="modify">Modify</string>
+    <string name="cancel">Cancel</string>
+    <string name="delete">Delete</string>
 </resources>
