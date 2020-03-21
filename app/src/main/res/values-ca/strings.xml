@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="new_room">NOVA SALA</string>
+    <string name="room_name">Nom sala</string>
+    <string name="capacity">Capacitat</string>
+    <string name="enter_username">Introdueix el teu nom d\'usuari</string>
+    <string name="enter_password">Introdueix la teva contrasenya</string>
+    <string name="title_activity_maps">Mapa</string>
+</resources>

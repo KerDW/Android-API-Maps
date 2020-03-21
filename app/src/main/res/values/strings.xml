@@ -1,4 +1,9 @@
 <resources>
-    <string name="app_name">ApiTest</string>
+    <string name="app_name" translatable="false">ApiTest</string>
     <string name="title_activity_maps">Map</string>
+    <string name="new_room">NEW ROOM</string>
+    <string name="room_name">Room Name</string>
+    <string name="capacity">Capacity</string>
+    <string name="enter_username">Enter your username</string>
+    <string name="enter_password">Enter your password</string>
 </resources>
