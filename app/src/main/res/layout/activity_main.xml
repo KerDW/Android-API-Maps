@@ -9,8 +9,8 @@
     <Button
         android:id="@+id/newRoom"
         android:layout_width="107dp"
-        android:layout_height="49dp"
-        android:layout_marginTop="76dp"
+        android:layout_height="54dp"
+        android:layout_marginTop="75dp"
         android:onClick="newRoom"
         android:text="@string/new_room"
         app:layout_constraintEnd_toEndOf="parent"
