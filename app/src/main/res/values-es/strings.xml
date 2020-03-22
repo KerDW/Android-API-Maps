@@ -13,4 +13,9 @@
     <string name="enter_room_capacity">Inserta la nueva capacidad de la sala</string>
     <string name="enter_room_name">Inserta el nuevo nombre de la sala</string>
     <string name="cancel">Cancela</string>
+    <string-array name="genders">
+        <item>Hombre</item>
+        <item>Mujer</item>
+        <item>Otro</item>
+    </string-array>
 </resources>
