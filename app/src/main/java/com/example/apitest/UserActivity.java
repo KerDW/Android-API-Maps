@@ -39,12 +39,7 @@ public class UserActivity extends AppCompatActivity {
             e.printStackTrace();
             Log.e("xd", e.getMessage()+"xd");
         }
-
-//        mSocket.on("ready", args -> {
-//
-//
-//
-//        });
+        
     }
 
     @Override
