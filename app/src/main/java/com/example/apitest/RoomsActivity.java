@@ -68,8 +68,13 @@ public class RoomsActivity extends AppCompatActivity {
 
         mSocket.on("ready", args -> {
 
+            String randomLetter = (String) args[0];
+            String requirement = (String) args[1];
+
             Intent intent = new Intent(this, MapsActivity.class);
             intent.putExtra("USERNAME", username);
+            intent.putExtra("RANDOM_LETTER", randomLetter);
+            intent.putExtra("REQUIREMENT", requirement);
 
             startActivity(intent);
 

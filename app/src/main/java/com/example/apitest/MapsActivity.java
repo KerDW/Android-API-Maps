@@ -20,6 +20,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.Locale;
+
 import static com.example.apitest.UserActivity.mSocket;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
@@ -61,10 +63,52 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        username = getIntent().getStringExtra("USERNAME");
+        Locale currentLocale = getResources().getConfiguration().locale;
 
         announcement = findViewById(R.id.announcementTitle);
         timerText = findViewById(R.id.timerText);
+
+        username = getIntent().getStringExtra("USERNAME");
+        String randomLetter = getIntent().getStringExtra("RANDOM_LETTER");
+        String requirement = getIntent().getStringExtra("REQUIREMENT");
+
+        switch(currentLocale.getLanguage()){
+            case "es":
+                switch(requirement){
+                    case "starting with":
+                        requirement = "que empiecen con";
+                        break;
+                    case "ending with":
+                        requirement = "que acaben con";
+                        break;
+                    case "containing":
+                        requirement = "que contengan";
+                        break;
+                }
+
+                announcement.setText("Paises " + requirement + " la letra " + randomLetter + " (en inglés)");
+                break;
+            case "ca":
+                switch(requirement){
+                    case "starting with":
+                        requirement = "que comencin amb";
+                        break;
+                    case "ending with":
+                        requirement = "que acabin amb";
+                        break;
+                    case "containing":
+                        requirement = "que continguin";
+                        break;
+                }
+
+                announcement.setText("Països " + requirement + " la lletra " + randomLetter + " (en anglès)");
+                break;
+            case "en":
+                announcement.setText("Countries " + requirement + " the letter " + randomLetter);
+                break;
+            default:
+                Log.e("xd", "wrong locale");
+        }
 
         createTimer();
 
@@ -93,7 +137,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     public void createTimer(){
-        cdn = new CountDownTimer(15000, 1000) {
+        cdn = new CountDownTimer(60000, 1000) {
 
             public void onTick(long millisUntilFinished) {
                 timeLeft = (int) millisUntilFinished;
