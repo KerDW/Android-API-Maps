@@ -153,17 +153,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             if(meetsRequirements(countryName)){
                                 switch(currentLocale.getLanguage()){
                                     case "es":
-                                        marker.setTitle("Acierto!");
+                                        marker.setTitle("Acierto! (" + countryName + ")");
                                         markerCount.setText("Marcadors: " + markersUsedNo);
                                         correctGuesses.setText("Aciertos: " + correctGuessesNo);
                                         break;
                                     case "ca":
-                                        marker.setTitle("Encert!");
+                                        marker.setTitle("Encert! (" + countryName + ")");
                                         markerCount.setText("Marcadores: " + markersUsedNo);
                                         correctGuesses.setText("Encerts: " + correctGuessesNo);
                                         break;
                                     case "en":
-                                        marker.setTitle("Guessed right!");
+                                        marker.setTitle("Guessed right! (" + countryName + ")");
                                         markerCount.setText("Markers: " + markersUsedNo);
                                         correctGuesses.setText("Correct guesses: " + correctGuessesNo);
                                         break;

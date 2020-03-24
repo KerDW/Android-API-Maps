@@ -18,4 +18,5 @@
         <item>Dona</item>
         <item>Altre</item>
     </string-array>
+    <string name="join">Entra</string>
 </resources>
