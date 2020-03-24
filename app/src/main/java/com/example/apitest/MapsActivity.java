@@ -60,8 +60,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     TextView correctGuesses;
     TextView markerCount;
 
+    int timerSeconds = 60;
     int correctGuessesNo = 0;
-    int markerCountNo = 0;
+    int markersUsedNo = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,6 +98,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         announcement = findViewById(R.id.announcementTitle);
         timerText = findViewById(R.id.timerText);
+        correctGuesses = findViewById(R.id.correctGuesses);
+        markerCount = findViewById(R.id.markerLimit);
 
         username = getIntent().getStringExtra("USERNAME");
         randomLetter = getIntent().getStringExtra("RANDOM_LETTER");
@@ -111,19 +114,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         externalApiService = retrofit.create(ApiService.class);
 
-        setLocalesText();
+        setLocalesTexts();
 
         createTimer();
 
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng point) {
-                mMap.addMarker(new MarkerOptions().position(point).title(username));
+                markersUsedNo++;
+
+                Marker marker = mMap.addMarker(new MarkerOptions().position(point).title(username));
+
+                // send the marker to the other clients
                 mSocket.emit("newMarker", point.latitude, point.longitude, username);
 
+                // check the country where these coordinates belong using an external api, then check if it meets the requirements
                 Call<JsonElement> callAsync = externalApiService.getCountry(point.latitude, point.longitude);
-
-                Log.i("xd", callAsync.request().url().toString());
 
                 callAsync.enqueue(new Callback<JsonElement>()
                 {
@@ -137,9 +143,54 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         if (obj != null) {
 
                             // check if the country meets the requirements and award the user if so
-                            String countryName = obj.get("countryName").getAsString();
+                            String countryName = obj.has("countryName") ? obj.get("countryName").getAsString() : null;
 
-                            checkRequirements(countryName);
+                            if(countryName == null){
+                                marker.setTitle("API error");
+                                return;
+                            }
+
+                            if(meetsRequirements(countryName)){
+                                switch(currentLocale.getLanguage()){
+                                    case "es":
+                                        marker.setTitle("Acierto!");
+                                        markerCount.setText("Marcadors: " + markersUsedNo);
+                                        correctGuesses.setText("Aciertos: " + correctGuessesNo);
+                                        break;
+                                    case "ca":
+                                        marker.setTitle("Encert!");
+                                        markerCount.setText("Marcadores: " + markersUsedNo);
+                                        correctGuesses.setText("Encerts: " + correctGuessesNo);
+                                        break;
+                                    case "en":
+                                        marker.setTitle("Guessed right!");
+                                        markerCount.setText("Markers: " + markersUsedNo);
+                                        correctGuesses.setText("Correct guesses: " + correctGuessesNo);
+                                        break;
+                                    default:
+                                        Log.e("xd", "error");
+                                        break;
+                                }
+                            } else {
+                                switch(currentLocale.getLanguage()){
+                                    case "es":
+                                        markerCount.setText("Marcadors: " + markersUsedNo);
+                                        marker.setTitle("Intentalo de nuevo");
+                                        break;
+                                    case "ca":
+                                        markerCount.setText("Marcadores: " + markersUsedNo);
+                                        marker.setTitle("Torna a provar");
+                                        break;
+                                    case "en":
+                                        markerCount.setText("Markers: " + markersUsedNo);
+                                        marker.setTitle("Try again");
+                                        break;
+                                    default:
+                                        Log.e("xd", "error");
+                                        break;
+                                }
+                            }
+                            marker.showInfoWindow();
 
                         } else {
                             Log.e("xd","Request Error :: " + response.errorBody());
@@ -150,6 +201,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     @Override
                     public void onFailure(Call<JsonElement> call, Throwable t)
                     {
+                        marker.setTitle("API error");
                         Log.e("xd", "Network Error :: " + t.getLocalizedMessage());
                     }
                 });
@@ -165,38 +217,41 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             // update view on ui thread
             runOnUiThread(new Runnable(){
                 public void run(){
-                    Marker m = mMap.addMarker(new MarkerOptions().position(location).title(markerUsername).icon(color));
-                    m.showInfoWindow();
+                    mMap.addMarker(new MarkerOptions().position(location).icon(color));
                 }
             });
         });
 
     }
 
-    public void checkRequirements(String countryName){
+    public boolean meetsRequirements(String countryName){
         switch(requirement){
             case "startingwith":
                 if(countryName.toLowerCase().startsWith(randomLetter.toLowerCase())) {
                     correctGuessesNo++;
+                    return true;
                 }
                 break;
             case "endingwith":
                 if(countryName.toLowerCase().endsWith(randomLetter.toLowerCase())) {
                     correctGuessesNo++;
+                    return true;
                 }
                 break;
             case "containing":
                 if(countryName.toLowerCase().contains(randomLetter.toLowerCase())){
                     correctGuessesNo++;
+                    return true;
                 }
                 break;
             default:
                 Log.e("xd", "error");
                 break;
         }
+        return false;
     }
 
-    public void setLocalesText(){
+    public void setLocalesTexts(){
         switch(currentLocale.getLanguage()){
             case "es":
                 switch(requirementText){
@@ -210,7 +265,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         requirementText = "que contengan";
                         break;
                 }
-
+                markerCount.setText("Marcadores: 0");
+                correctGuesses.setText("Aciertos: 0");
                 announcement.setText("Paises " + requirementText + " la letra " + randomLetter + " (en inglés)");
                 break;
             case "ca":
@@ -225,10 +281,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         requirementText = "que continguin";
                         break;
                 }
-
+                markerCount.setText("Marcadors: 0");
+                correctGuesses.setText("Encerts: 0");
                 announcement.setText("Països " + requirementText + " la lletra " + randomLetter + " (en anglès)");
                 break;
             case "en":
+                markerCount.setText("Markers: 0");
+                correctGuesses.setText("Correct guesses: 0");
                 announcement.setText("Countries " + requirementText + " the letter " + randomLetter);
                 break;
             default:
@@ -237,7 +296,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     public void createTimer(){
-        cdn = new CountDownTimer(30000, 1000) {
+        cdn = new CountDownTimer(timerSeconds * 1000, 1000) {
 
             public void onTick(long millisUntilFinished) {
                 timeLeft = (int) millisUntilFinished;

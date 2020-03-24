@@ -33,4 +33,24 @@
         android:layout_marginStart="300dp"
         android:layout_marginTop="4dp" />
 
+    <TextView
+        android:id="@+id/correctGuesses"
+        android:layout_width="99dp"
+        android:layout_height="33dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="7dp"
+        android:layout_marginTop="4dp"
+        android:textColor="@color/black" />
+
+    <TextView
+        android:id="@+id/markerLimit"
+        android:layout_width="121dp"
+        android:layout_height="33dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="114dp"
+        android:layout_marginTop="4dp"
+        android:textColor="@color/black" />
+
 </RelativeLayout>
