@@ -25,6 +25,7 @@ import com.google.gson.JsonObject;
 
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -63,6 +64,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     int timerSeconds = 60;
     int correctGuessesNo = 0;
     int markersUsedNo = 0;
+    ArrayList<String> countriesGuessed = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -149,6 +151,28 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                 marker.setTitle("API error");
                                 return;
                             }
+
+                            if(countriesGuessed.contains(countryName)){
+                                switch(currentLocale.getLanguage()){
+                                    case "es":
+                                        marker.setTitle("Este pais ya ha sido marcado");
+                                        break;
+                                    case "ca":
+                                        marker.setTitle("Aquest païs ja ha sigut marcat");
+                                        break;
+                                    case "en":
+                                        marker.setTitle("This country was marked already");
+                                        break;
+                                    default:
+                                        Log.e("xd", "error");
+                                        break;
+                                }
+                                marker.showInfoWindow();
+                                Log.i("xd", "repeated country");
+                                return;
+                            }
+
+                            countriesGuessed.add(countryName);
 
                             if(meetsRequirements(countryName)){
                                 switch(currentLocale.getLanguage()){
