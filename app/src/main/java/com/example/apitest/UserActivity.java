@@ -15,10 +15,16 @@ import com.github.nkzawa.socketio.client.Socket;
 
 import java.net.URISyntaxException;
 
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
 public class UserActivity extends AppCompatActivity {
 
     static Socket mSocket;
     static String localhost = "http://10.0.2.2";
+
+    Retrofit retrofit;
+    static ApiService service;
 
     EditText username;
     EditText password;
@@ -31,6 +37,13 @@ public class UserActivity extends AppCompatActivity {
         username = findViewById(R.id.username);
         password = findViewById(R.id.password);
         join = findViewById(R.id.join);
+
+        retrofit = new Retrofit.Builder()
+                .baseUrl(localhost + ":80/laravelrestapi/public/api/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        service = retrofit.create(ApiService.class);
 
         try {
             mSocket = IO.socket(localhost+":5000");

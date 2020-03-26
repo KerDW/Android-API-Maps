@@ -25,12 +25,10 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 import static com.example.apitest.UserActivity.localhost;
 import static com.example.apitest.UserActivity.mSocket;
+import static com.example.apitest.UserActivity.service;
 import static java.lang.Integer.parseInt;
 
 public class RoomsActivity extends AppCompatActivity {
-
-    Retrofit retrofit;
-    static ApiService service;
 
     Locale currentLocale;
 
@@ -52,13 +50,6 @@ public class RoomsActivity extends AppCompatActivity {
         lv = findViewById(R.id.lv);
 
         currentLocale = getResources().getConfiguration().locale;
-
-        retrofit = new Retrofit.Builder()
-                .baseUrl(localhost + ":80/laravelrestapi/public/api/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        service = retrofit.create(ApiService.class);
 
         String username = getIntent().getStringExtra("USERNAME");
 
@@ -153,7 +144,37 @@ public class RoomsActivity extends AppCompatActivity {
             Call<Room> call = service.newRoom(room);
 
             try {
-                call.execute();
+                Response response = call.execute();
+                Log.i("xd", response.code()+"");
+                if(response.code() == 400){
+                    // update view on ui thread
+                    runOnUiThread(new Runnable(){
+                        public void run() {
+                            switch (currentLocale.getLanguage()) {
+                                case "en":
+                                    Toast.makeText(
+                                            getApplicationContext(),
+                                            "This room name is already in use, pick a different one.",
+                                            Toast.LENGTH_LONG).show();
+                                    break;
+                                case "ca":
+                                    Toast.makeText(
+                                            getApplicationContext(),
+                                            "Aquest nom de sala ja está en ús, escull un altre.",
+                                            Toast.LENGTH_LONG).show();
+                                    break;
+                                case "es":
+                                    Toast.makeText(
+                                            getApplicationContext(),
+                                            "Este nombre de sala ya está en uso, escoge otro.",
+                                            Toast.LENGTH_LONG).show();
+                                    break;
+                                default:
+                                    Log.e("xd", "error");
+                            }
+                        }
+                    });
+                }
             } catch (IOException e) {
                 e.printStackTrace();
                 Log.i("xd", e.getMessage()+"");

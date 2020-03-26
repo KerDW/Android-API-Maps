@@ -20,8 +20,8 @@ import java.util.List;
 
 import retrofit2.Call;
 
-import static com.example.apitest.RoomsActivity.service;
 import static com.example.apitest.UserActivity.mSocket;
+import static com.example.apitest.UserActivity.service;
 import static java.lang.Integer.parseInt;
 
 class RoomListAdapter extends ArrayAdapter <Room>{

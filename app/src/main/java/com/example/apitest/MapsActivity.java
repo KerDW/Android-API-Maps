@@ -35,7 +35,6 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-import static com.example.apitest.RoomsActivity.service;
 import static com.example.apitest.UserActivity.localhost;
 import static com.example.apitest.UserActivity.mSocket;
 
