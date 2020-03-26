@@ -34,7 +34,7 @@
         android:id="@+id/join"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="104dp"
+        android:layout_marginTop="76dp"
         android:layout_marginEnd="160dp"
         android:onClick="join"
         android:text="@string/join"
@@ -50,5 +50,36 @@
         android:entries="@array/genders"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/password" />
+
+    <ListView
+        android:id="@+id/countries"
+        android:layout_width="413dp"
+        android:layout_height="141dp"
+        android:layout_marginTop="25dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/searchButton" />
+
+    <EditText
+        android:id="@+id/countrySearch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="52dp"
+        android:ems="10"
+        android:hint="@string/search_country"
+        android:inputType="textPersonName"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/join" />
+
+    <Button
+        android:id="@+id/searchButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="52dp"
+        android:onClick="getCountries"
+        android:text="@string/search"
+        app:layout_constraintStart_toEndOf="@+id/countrySearch"
+        app:layout_constraintTop_toBottomOf="@+id/join" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

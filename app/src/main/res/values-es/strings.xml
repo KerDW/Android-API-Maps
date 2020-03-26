@@ -19,4 +19,6 @@
         <item>Otro</item>
     </string-array>
     <string name="join">Entra</string>
+    <string name="search_country">Busca un país</string>
+    <string name="search">Busca</string>
 </resources>

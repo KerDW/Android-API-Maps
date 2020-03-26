@@ -31,7 +31,7 @@ public interface ApiService {
     Call<Void> destroyRoom(@Path("id") int id);
 
     @GET("countries")
-    Call<List<Country>> getRooms(@Query("q") String q);
+    Call<List<Country>> getCountries(@Query("q") String q);
 
     @GET("countryCodeJSON?username=potato")
     Call<JsonElement> getCountry(@Query("lat") double lat, @Query("lng") double lng);

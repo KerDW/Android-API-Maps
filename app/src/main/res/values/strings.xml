@@ -11,9 +11,11 @@
     <string name="enter">Enter</string>
     <string name="join">Join</string>
     <string name="edit">Edit</string>
+    <string name="search">Search</string>
     <string name="modify">Modify</string>
     <string name="cancel">Cancel</string>
     <string name="delete">Delete</string>
+    <string name="search_country">Search for countries</string>
     <string-array name="genders">
         <item>Male</item>
         <item>Female</item>
