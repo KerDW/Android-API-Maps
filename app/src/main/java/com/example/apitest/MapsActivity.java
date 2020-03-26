@@ -61,7 +61,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     TextView correctGuesses;
     TextView markerCount;
 
-    int timerSeconds = 60;
+    int timerSeconds = 90;
     int correctGuessesNo = 0;
     int markersUsedNo = 0;
     ArrayList<String> countriesGuessed = new ArrayList<>();
@@ -246,6 +246,47 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             });
         });
 
+        mSocket.on("winner", args -> {
+
+            Log.i("xd", "winner received");
+
+            String winnerName = (String) args[0];
+            int winnerPoints = (int) args[1];
+
+            // update view on ui thread
+            runOnUiThread(new Runnable(){
+                public void run(){
+
+                    switch(currentLocale.getLanguage()){
+                        case "en":
+                            Toast.makeText(
+                                    getApplicationContext(),
+                                    "The winner is " + winnerName + " with " + winnerPoints + " correct guesses.",
+                                    Toast.LENGTH_LONG).show();
+                            break;
+                        case "ca":
+                            Toast.makeText(
+                                    getApplicationContext(),
+                                    "El guanyador es " + winnerName + " amb " + winnerPoints + " encerts.",
+                                    Toast.LENGTH_LONG).show();
+                            break;
+                        case "es":
+                            Toast.makeText(
+                                    getApplicationContext(),
+                                    "El ganador es " + winnerName + " con " + winnerPoints + " aciertos.",
+                                    Toast.LENGTH_LONG).show();
+                            break;
+                        default:
+                            Log.e("xd", "error");
+                    }
+
+
+                }
+            });
+
+            mSocket.emit("gameFinished");
+        });
+
     }
 
     public boolean meetsRequirements(String countryName){
@@ -335,12 +376,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     public void finishGame(){
 
-        mSocket.emit("gameFinished");
-
-        Toast.makeText(
-                getApplicationContext(),
-                "Time's up!",
-                Toast.LENGTH_LONG).show();
+        mSocket.emit("points", correctGuessesNo);
 
         Intent intent = new Intent(MapsActivity.this, RoomsActivity.class);
         intent.putExtra("USERNAME", username);

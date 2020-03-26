@@ -10,10 +10,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -29,6 +31,8 @@ public class RoomsActivity extends AppCompatActivity {
 
     Retrofit retrofit;
     static ApiService service;
+
+    Locale currentLocale;
 
     EditText newRoomText;
     EditText capacity;
@@ -46,6 +50,8 @@ public class RoomsActivity extends AppCompatActivity {
         newRoomText = findViewById(R.id.newRoomText);
         capacity = findViewById(R.id.capacity);
         lv = findViewById(R.id.lv);
+
+        currentLocale = getResources().getConfiguration().locale;
 
         retrofit = new Retrofit.Builder()
                 .baseUrl(localhost + ":80/laravelrestapi/public/api/")
@@ -84,6 +90,46 @@ public class RoomsActivity extends AppCompatActivity {
 
             getRooms();
 
+        });
+
+        mSocket.on("winner", args -> {
+
+            Log.i("xd", "winner received");
+
+            String winnerName = (String) args[0];
+            int winnerPoints = (int) args[1];
+
+            // update view on ui thread
+            runOnUiThread(new Runnable(){
+                public void run(){
+
+                    switch(currentLocale.getLanguage()){
+                        case "en":
+                            Toast.makeText(
+                                    getApplicationContext(),
+                                    "The winner is " + winnerName + " with " + winnerPoints + " correct guesses.",
+                                    Toast.LENGTH_LONG).show();
+                            break;
+                        case "ca":
+                            Toast.makeText(
+                                    getApplicationContext(),
+                                    "El guanyador es " + winnerName + " amb " + winnerPoints + " encerts.",
+                                    Toast.LENGTH_LONG).show();
+                            break;
+                        case "es":
+                            Toast.makeText(
+                                    getApplicationContext(),
+                                    "El ganador es " + winnerName + " con " + winnerPoints + " aciertos.",
+                                    Toast.LENGTH_LONG).show();
+                            break;
+                        default:
+                            Log.e("xd", "error");
+                    }
+
+                }
+            });
+
+            mSocket.emit("gameFinished");
         });
 
     }
