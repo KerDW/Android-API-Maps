@@ -383,4 +383,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         startActivity(intent);
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mSocket.disconnect();
+
+    }
 }
